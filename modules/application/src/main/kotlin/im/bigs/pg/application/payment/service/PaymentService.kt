@@ -51,9 +51,10 @@ class PaymentService(
             ),
         )
 
-        val effectivePolicy = feePolicyRepository.findEffectivePolicy(command.partnerId) ?: throw FeePolicyNotFoundException(
-            "No fee policy for partner ${partner.id}"
-        )
+        val effectivePolicy =
+            feePolicyRepository.findEffectivePolicy(command.partnerId) ?: throw FeePolicyNotFoundException(
+                "No fee policy for partner ${partner.id}"
+            )
 
         val rate = effectivePolicy.percentage
         val fixedFee = effectivePolicy.fixedFee

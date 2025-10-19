@@ -39,8 +39,11 @@ class 결제서비스Test {
         val service = PaymentService(partnerRepo, feeRepo, paymentRepo, listOf(pgClient))
         every { partnerRepo.findById(1L) } returns Partner(1L, "TEST", "Test", true)
         every { feeRepo.findEffectivePolicy(1L, any()) } returns FeePolicy(
-            id = 10L, partnerId = 1L, effectiveFrom = LocalDateTime.ofInstant(Instant.parse("2020-01-01T00:00:00Z"), ZoneOffset.UTC),
-            percentage = BigDecimal("0.0300"), fixedFee = BigDecimal("100")
+            id = 10L,
+            partnerId = 1L,
+            effectiveFrom = LocalDateTime.ofInstant(Instant.parse("2020-01-01T00:00:00Z"), ZoneOffset.UTC),
+            percentage = BigDecimal("0.0300"),
+            fixedFee = BigDecimal("100")
         )
         val savedSlot = slot<Payment>()
         every { paymentRepo.save(capture(savedSlot)) } answers { savedSlot.captured.copy(id = 99L) }

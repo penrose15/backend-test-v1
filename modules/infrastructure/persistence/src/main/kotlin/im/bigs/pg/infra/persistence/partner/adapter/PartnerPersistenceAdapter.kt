@@ -13,5 +13,6 @@ class PartnerPersistenceAdapter(
     private val repo: PartnerJpaRepository,
 ) : PartnerOutPort {
     override fun findById(id: Long): Partner? =
-        repo.findById(id).orElse(null)?.let { Partner(id = it.id!!, code = it.code, name = it.name, active = it.active) }
+        repo.findById(id).orElse(null)
+            ?.let { Partner(id = it.id!!, code = it.code, name = it.name, active = it.active) }
 }

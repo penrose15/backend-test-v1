@@ -32,9 +32,11 @@ class RestClientConfig(
                         val result = objectMapper.readValue(responseBody, PgErrorResponse::class.java)
                         throw PayFailedException("PG 요청 실패: ${result.errorCode}, ${result.message}")
                     }
+
                     401 -> {
                         throw PayFailedException("PG 인증 실패: $status")
                     }
+
                     else -> {
                         throw PayFailedException("PG 요청 실패: $status")
                     }
