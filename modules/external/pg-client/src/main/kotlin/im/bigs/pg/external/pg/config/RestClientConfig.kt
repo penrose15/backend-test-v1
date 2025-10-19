@@ -2,7 +2,7 @@ package im.bigs.pg.external.pg.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import im.bigs.pg.external.pg.exception.PayFailedException
-import im.bigs.pg.external.pg.exception.dto.ErrorResponse
+import im.bigs.pg.external.pg.exception.dto.PgErrorResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.client.SimpleClientHttpRequestFactory
@@ -29,7 +29,7 @@ class RestClientConfig(
                     422 -> {
                         val responseBody = response.body.readAllBytes()
                             .toString(Charsets.UTF_8)
-                        val result = objectMapper.readValue(responseBody, ErrorResponse::class.java)
+                        val result = objectMapper.readValue(responseBody, PgErrorResponse::class.java)
                         throw PayFailedException("PG 요청 실패: ${result.errorCode}, ${result.message}")
                     }
                     401 -> {
