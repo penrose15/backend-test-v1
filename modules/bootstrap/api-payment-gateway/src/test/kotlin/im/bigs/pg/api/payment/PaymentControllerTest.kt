@@ -115,7 +115,6 @@ class PaymentControllerTest @Autowired constructor(
 
         val nextCursor = objectMapper.readValue(initialResult.response.contentAsString, QueryResponse::class.java)
             .nextCursor
-        println("Next Cursor: $nextCursor")
 
         val requestParams = getRequestParams(nextCursor)
 
