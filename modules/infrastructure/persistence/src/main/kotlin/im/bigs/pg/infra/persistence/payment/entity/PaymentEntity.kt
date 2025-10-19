@@ -1,11 +1,6 @@
 package im.bigs.pg.infra.persistence.payment.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.math.BigDecimal
 import java.time.Instant
 
@@ -19,27 +14,27 @@ class PaymentEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     @Column(nullable = false)
-    var partnerId: Long,
+    var partnerId: Long = 0L,
     @Column(nullable = false, precision = 15, scale = 0)
-    var amount: BigDecimal,
+    var amount: BigDecimal = 0.toBigDecimal(),
     @Column(nullable = false, precision = 10, scale = 6)
-    var appliedFeeRate: BigDecimal,
+    var appliedFeeRate: BigDecimal = 0.toBigDecimal(),
     @Column(nullable = false, precision = 15, scale = 0)
-    var feeAmount: BigDecimal,
+    var feeAmount: BigDecimal = 0.toBigDecimal(),
     @Column(nullable = false, precision = 15, scale = 0)
-    var netAmount: BigDecimal,
+    var netAmount: BigDecimal = 0.toBigDecimal(),
     @Column(length = 8)
     var cardBin: String? = null,
     @Column(length = 4)
     var cardLast4: String? = null,
     @Column(nullable = false, length = 32)
-    var approvalCode: String,
+    var approvalCode: String = "",
     @Column(nullable = false)
-    var approvedAt: Instant,
+    var approvedAt: Instant = Instant.now(),
     @Column(nullable = false, length = 20)
-    var status: String,
+    var status: String = "",
     @Column(nullable = false)
-    var createdAt: Instant,
+    var createdAt: Instant = Instant.now(),
     @Column(nullable = false)
-    var updatedAt: Instant,
+    var updatedAt: Instant = Instant.now(),
 )
