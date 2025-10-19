@@ -1,11 +1,6 @@
 package im.bigs.pg.infra.persistence.partner.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 /**
  * DB용 Partner 엔티티.
@@ -17,9 +12,9 @@ class PartnerEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     @Column(nullable = false, unique = true)
-    var code: String,
+    var code: String = "",
     @Column(nullable = false)
-    var name: String,
+    var name: String = "",
     @Column(nullable = false)
     var active: Boolean = true,
 )

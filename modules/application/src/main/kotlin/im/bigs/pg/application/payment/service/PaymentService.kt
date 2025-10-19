@@ -2,12 +2,13 @@ package im.bigs.pg.application.payment.service
 
 import im.bigs.pg.application.partner.port.out.FeePolicyOutPort
 import im.bigs.pg.application.partner.port.out.PartnerOutPort
-import im.bigs.pg.application.payment.port.`in`.PaymentUseCase
 import im.bigs.pg.application.payment.port.`in`.PaymentCommand
+import im.bigs.pg.application.payment.port.`in`.PaymentUseCase
 import im.bigs.pg.application.payment.port.out.PaymentOutPort
 import im.bigs.pg.application.pg.port.out.PgApproveRequest
 import im.bigs.pg.application.pg.port.out.PgClientOutPort
 import im.bigs.pg.domain.calculation.FeeCalculator
+import im.bigs.pg.domain.partner.exception.FeePolicyNotFoundException
 import im.bigs.pg.domain.payment.Payment
 import im.bigs.pg.domain.payment.PaymentStatus
 import org.springframework.stereotype.Service
@@ -43,22 +44,30 @@ class PaymentService(
                 amount = command.amount,
                 cardBin = command.cardBin,
                 cardLast4 = command.cardLast4,
+                birthDate = command.birthDate,
+                expiry = command.expiry,
+                password = command.password,
                 productName = command.productName,
             ),
         )
-        val hardcodedRate = java.math.BigDecimal("0.0300")
-        val hardcodedFixed = java.math.BigDecimal("100")
-        val (fee, net) = FeeCalculator.calculateFee(command.amount, hardcodedRate, hardcodedFixed)
+
+        val effectivePolicy = feePolicyRepository.findEffectivePolicy(command.partnerId) ?: throw FeePolicyNotFoundException(
+            "No fee policy for partner ${partner.id}"
+        )
+
+        val rate = effectivePolicy.percentage
+        val fixedFee = effectivePolicy.fixedFee
+        val (fee, net) = FeeCalculator.calculateFee(command.amount, rate, fixedFee)
         val payment = Payment(
             partnerId = partner.id,
             amount = command.amount,
-            appliedFeeRate = hardcodedRate,
+            appliedFeeRate = rate,
             feeAmount = fee,
             netAmount = net,
             cardBin = command.cardBin,
             cardLast4 = command.cardLast4,
             approvalCode = approve.approvalCode,
-            approvedAt = approve.approvedAt,
+            approvedAt = approve.approvedAt.plusHours(9), // PG사에서 UTC로 반환하므로 한국 시간에 맞추어 저장
             status = PaymentStatus.APPROVED,
         )
 
