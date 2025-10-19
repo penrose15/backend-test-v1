@@ -1,3 +1,4 @@
+// ktlint-disable filename
 package im.bigs.pg.domain.calculation
 
 import org.junit.jupiter.api.DisplayName

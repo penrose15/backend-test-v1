@@ -1,3 +1,4 @@
+// ktlint-disable filename
 package im.bigs.pg.infra.persistence
 
 import im.bigs.pg.infra.persistence.config.JpaConfig
