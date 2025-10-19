@@ -1,12 +1,14 @@
 package im.bigs.pg.application.payment.port.`in`
 
 import im.bigs.pg.domain.payment.Payment
+import org.springframework.validation.annotation.Validated
 
 /**
  * 결제 생성 유스케이스(입력 포트).
  * - 어댑터(REST 등)에서 수신한 요청을 도메인/아웃바운드 포트로 위임합니다.
  * - 구현은 결제 승인 → 수수료 계산 → 영속화의 순서로 동작하는 것이 일반적입니다.
  */
+@Validated
 interface PaymentUseCase {
     /**
      * 결제를 수행하고 저장된 Payment 스냅샷을 반환합니다.
