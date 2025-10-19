@@ -70,6 +70,11 @@ project(":modules:bootstrap") {
         apply(plugin = "org.springframework.boot")
         apply(plugin = "io.spring.dependency-management")
         apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+
+        dependencies {
+            // swagger
+            implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
+        }
     }
 }
 

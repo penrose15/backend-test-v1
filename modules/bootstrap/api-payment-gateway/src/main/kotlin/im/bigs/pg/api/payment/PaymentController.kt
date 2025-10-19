@@ -1,21 +1,18 @@
 package im.bigs.pg.api.payment
 
-import im.bigs.pg.application.payment.port.`in`.PaymentUseCase
-import im.bigs.pg.application.payment.port.`in`.PaymentCommand
-import im.bigs.pg.application.payment.port.`in`.*
 import im.bigs.pg.api.payment.dto.CreatePaymentRequest
 import im.bigs.pg.api.payment.dto.PaymentResponse
 import im.bigs.pg.api.payment.dto.QueryResponse
 import im.bigs.pg.api.payment.dto.Summary
+import im.bigs.pg.application.payment.port.`in`.PaymentCommand
+import im.bigs.pg.application.payment.port.`in`.PaymentUseCase
+import im.bigs.pg.application.payment.port.`in`.QueryFilter
+import im.bigs.pg.application.payment.port.`in`.QueryPaymentsUseCase
+import jakarta.validation.Valid
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 
 /**
@@ -29,13 +26,11 @@ import java.time.LocalDateTime
 class PaymentController(
     private val paymentUseCase: PaymentUseCase,
     private val queryPaymentsUseCase: QueryPaymentsUseCase,
-) {
+) : PaymentApi {
 
     /** 결제 생성 요청 페이로드(간소화된 필드). */
-    
 
     /** API 응답을 위한 변환용 DTO. 도메인 모델을 그대로 노출하지 않습니다. */
-    
 
     /**
      * 결제 생성.
@@ -44,13 +39,16 @@ class PaymentController(
      * @return 생성된 결제 요약 응답
      */
     @PostMapping
-    fun create(@RequestBody req: CreatePaymentRequest): ResponseEntity<PaymentResponse> {
+    override fun create(@Valid @RequestBody req: CreatePaymentRequest): ResponseEntity<PaymentResponse> {
         val saved = paymentUseCase.pay(
             PaymentCommand(
                 partnerId = req.partnerId,
                 amount = req.amount,
                 cardBin = req.cardBin,
                 cardLast4 = req.cardLast4,
+                birthDate = req.birthDate,
+                expiry = req.expiry,
+                password = req.password,
                 productName = req.productName,
             ),
         )
@@ -58,7 +56,6 @@ class PaymentController(
     }
 
     /** 목록 + 통계를 포함한 조회 응답. */
-    
 
     /**
      * 결제 조회(커서 기반 페이지네이션 + 통계).
@@ -72,7 +69,7 @@ class PaymentController(
      * @return 목록/통계/커서 정보
      */
     @GetMapping
-    fun query(
+    override fun query(
         @RequestParam(required = false) partnerId: Long?,
         @RequestParam(required = false) status: String?,
         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") from: LocalDateTime?,
