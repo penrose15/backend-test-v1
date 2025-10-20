@@ -31,8 +31,8 @@ class ApiControllerAdvice {
         return getErrorResponse(HttpStatus.BAD_REQUEST, "Validation failed: $result", ex)
     }
 
-    @ExceptionHandler(IllegalArgumentException::class)
-    fun handleIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<ErrorResponse> {
+    @ExceptionHandler(IllegalArgumentException::class, IllegalStateException::class)
+    fun handleIllegalArgumentException(ex: Exception): ResponseEntity<ErrorResponse> {
         return getErrorResponse(HttpStatus.BAD_REQUEST, ex.message, ex)
     }
 
