@@ -34,7 +34,7 @@ class PgClient(
         const val GCM_TAG_LENGTH = 128
     }
 
-    override fun supports(partnerId: Long): Boolean = true
+    override fun supports(partnerId: Long): Boolean = partnerId > 1L
 
     override fun approve(request: PgApproveRequest): PgApproveResult {
         // 요청 body 암호화
