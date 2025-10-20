@@ -1,0 +1,15 @@
+services:
+  mariadb:
+    image: 'mariadb:latest'
+    environment:
+      TZ: Asia/Seoul
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_USER: ${MARIADB_USER}
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./db/conf.d:/etc/mysql.conf.d
+      - ./db/data:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
