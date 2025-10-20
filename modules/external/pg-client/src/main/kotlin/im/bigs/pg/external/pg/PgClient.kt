@@ -28,7 +28,6 @@ class PgClient(
 ) : PgClientOutPort {
     companion object {
         const val APPROVE_URL = "/api/v1/pay/credit-card"
-        const val API_KEY_HEADER = "API-KEY"
         const val KEY_ALGORITHM = "SHA-256"
         const val SECRET_KEY_ALGORITHM = "AES"
         const val CIPHER_ALGORITHM = "AES/GCM/NoPadding"
@@ -46,7 +45,6 @@ class PgClient(
                 it.path(APPROVE_URL)
                     .build()
             }
-            .header(API_KEY_HEADER, pgProperties.apiKey)
             .contentType(MediaType.APPLICATION_JSON)
             .body(PgRequest(enc))
             .retrieve()

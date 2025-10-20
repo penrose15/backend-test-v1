@@ -14,6 +14,9 @@ class RestClientConfig(
     private val pgProperties: PgProperties,
     private val objectMapper: ObjectMapper
 ) {
+    companion object {
+        const val API_KEY_HEADER = "API-KEY"
+    }
 
     @Bean
     fun restClient(): RestClient {
@@ -23,6 +26,7 @@ class RestClientConfig(
 
         return RestClient.builder()
             .baseUrl(pgProperties.url)
+            .defaultHeader(API_KEY_HEADER, pgProperties.apiKey)
             .requestFactory(requestFactory) // timeout 설정
             .defaultStatusHandler({ code -> !code.is2xxSuccessful }) { _, response ->
                 when (val status = response.statusCode.value()) {
