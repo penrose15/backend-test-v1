@@ -88,9 +88,12 @@
 POST /api/v1/payments
 {
   "partnerId": 1,
-  "amount": 10000,
-  "cardBin": "123456",
-  "cardLast4": "4242",
+  "amount": 1000,
+  "cardBin": "111111",
+  "cardLast4": "1111",
+  "expiry": "1227",
+  "birthDate": "19900101",
+  "password": "12",
   "productName": "샘플"
 }
 
